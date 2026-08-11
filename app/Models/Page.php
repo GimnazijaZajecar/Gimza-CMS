@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Page extends Model
+{
+    protected $fillable = [
+        'title',
+        'slug',
+        'content',
+        'parent_id',
+        'order',
+        'is_active',
+    ];
+
+    public function parent()
+    {
+        return $this->belongsTo(Page::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Page::class, 'parent_id')->orderBy('order');
+    }
+}
