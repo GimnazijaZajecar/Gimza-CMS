@@ -17,14 +17,15 @@ class GalleryImageForm
                     ->required()
                     ->searchable()
                     ->preload()
-                    ->label('Galerija'),
+                    ->label('Галерија'),
                 Select::make('file_id')
                     ->relationship('file', 'title')
                     ->required()
                     ->searchable()
                     ->preload()
-                    ->label('Slika'),
+                    ->label('Слика'),
                 TextInput::make('order')
+                    ->label('Редослед')
                     ->required()
                     ->numeric()
                     ->default(0),

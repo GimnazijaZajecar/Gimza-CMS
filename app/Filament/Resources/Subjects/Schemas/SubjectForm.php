@@ -13,8 +13,10 @@ class SubjectForm
         return $schema
             ->components([
                 TextInput::make('name')
+                    ->label('Назив')
                     ->required(),
                 Textarea::make('description')
+                    ->label('Опис')
                     ->columnSpanFull(),
             ]);
     }

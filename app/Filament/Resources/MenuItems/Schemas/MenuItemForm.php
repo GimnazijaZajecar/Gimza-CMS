@@ -14,22 +14,27 @@ class MenuItemForm
         return $schema
             ->components([
                 TextInput::make('label')
+                    ->label('Ознака')
                     ->required(),
                 TextInput::make('url')
+                    ->label('Линк')
                     ->required(),
                 Select::make('parent_id')
                     ->relationship('parent', 'label')
                     ->searchable()
                     ->preload()
-                    ->label('Roditeljska stavka'),
+                    ->label('Родитељска ставка'),
                 TextInput::make('order')
+                    ->label('Редослед')
                     ->required()
                     ->numeric()
                     ->default(0),
                 Toggle::make('is_external')
+                    ->label('Спољашњи линк')
                     ->required()
                     ->default(false),
                 Toggle::make('is_active')
+                    ->label('Активно')
                     ->required()
                     ->default(true),
             ]);

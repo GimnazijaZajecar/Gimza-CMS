@@ -15,13 +15,19 @@ class GalleryForm
         return $schema
             ->components([
                 TextInput::make('title')
+                    ->label('Наслов')
                     ->required(),
                 Textarea::make('description')
+                    ->label('Опис')
                     ->columnSpanFull(),
                 DateTimePicker::make('created_date')
-                    ->required(),
+                    ->label('Датум креирања')
+                    ->required()
+                    ->default(now()),
                 Toggle::make('is_active')
-                    ->required(),
+                    ->label('Активно')
+                    ->required()
+                    ->default(true),
             ]);
     }
 }

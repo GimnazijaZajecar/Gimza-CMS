@@ -15,19 +15,22 @@ class FileForm
         return $schema
             ->components([
                 TextInput::make('title')
+                    ->label('Наслов')
                     ->required(),
                 FileUpload::make('url')
-                    ->label('Fajl')
+                    ->label('Фајл')
                     ->directory('uploads')
                     ->storeFileNamesIn('file_name')
                     ->required(),
                 Select::make('file_type')
+                    ->label('Тип фајла')
                     ->options([
-                        'image' => 'Slika',
-                        'document' => 'Dokument',
+                        'image' => 'Слика',
+                        'document' => 'Документ',
                     ])
                     ->required(),
                 Toggle::make('is_active')
+                    ->label('Активно')
                     ->required()
                     ->default(true),
             ]);

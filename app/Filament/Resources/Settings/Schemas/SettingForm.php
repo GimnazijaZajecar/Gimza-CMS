@@ -12,21 +12,21 @@ class SettingForm
         return $schema
             ->components([
                 TextInput::make('address')
-                    ->label('Adresa'),
+                    ->label('Адреса'),
                 TextInput::make('phone')
                     ->tel()
-                    ->label('Telefon'),
+                    ->label('Телефон'),
                 TextInput::make('email')
                     ->email()
-                    ->label('Email'),
+                    ->label('Имејл'),
                 TextInput::make('working_hours')
-                    ->label('Radno vreme'),
+                    ->label('Радно време'),
                 TextInput::make('facebook_url')
                     ->url()
-                    ->label('Facebook link'),
+                    ->label('Facebook линк'),
                 TextInput::make('instagram_url')
                     ->url()
-                    ->label('Instagram link'),
+                    ->label('Instagram линк'),
             ]);
     }
 }

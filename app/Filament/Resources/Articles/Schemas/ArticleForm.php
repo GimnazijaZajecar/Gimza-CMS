@@ -18,15 +18,18 @@ class ArticleForm
         return $schema
             ->components([
                 TextInput::make('title')
+                    ->label('Наслов')
                     ->required(),
                 Textarea::make('description')
+                    ->label('Опис')
                     ->required()
                     ->columnSpanFull(),
                 Select::make('type')
+                    ->label('Тип')
                     ->options([
-                        'vest' => 'Vest',
-                        'uspeh' => 'Uspeh',
-                        'dogadjaj' => 'Događaj',
+                        'vest' => 'Вест',
+                        'uspeh' => 'Успех',
+                        'dogadjaj' => 'Догађај',
                     ])
                     ->required()
                     ->live(),
@@ -34,30 +37,33 @@ class ArticleForm
                     ->relationship('category', 'name')
                     ->searchable()
                     ->preload()
-                    ->label('Kategorija'),
+                    ->label('Категорија'),
                 Select::make('tags')
                     ->relationship('tags', 'name')
                     ->multiple()
                     ->searchable()
                     ->preload()
-                    ->label('Tagovi'),
+                    ->label('Тагови'),
                 Select::make('featured_image_id')
                     ->relationship('featuredImage', 'title')
                     ->searchable()
                     ->preload()
-                    ->label('Naslovna slika'),
+                    ->label('Насловна слика'),
                 DateTimePicker::make('event_date')
                     ->visible(fn (Get $get) => $get('type') === 'dogadjaj')
-                    ->label('Datum događaja'),
+                    ->label('Датум догађаја'),
                 TextInput::make('event_location')
                     ->visible(fn (Get $get) => $get('type') === 'dogadjaj')
-                    ->label('Mesto održavanja'),
+                    ->label('Место одржавања'),
                 Toggle::make('is_featured')
+                    ->label('Издвојено')
                     ->required(),
                 Toggle::make('is_active')
+                    ->label('Активно')
                     ->required()
                     ->default(true),
                 TextInput::make('status')
+                    ->label('Статус')
                     ->required()
                     ->default('draft'),
             ]);

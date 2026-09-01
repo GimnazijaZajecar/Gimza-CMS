@@ -15,19 +15,23 @@ class ProjectForm
         return $schema
             ->components([
                 TextInput::make('title')
+                    ->label('Наслов')
                     ->required(),
                 Textarea::make('description')
+                    ->label('Опис')
                     ->columnSpanFull(),
                 TextInput::make('external_url')
+                    ->label('Спољашњи линк')
                     ->url(),
                 Toggle::make('is_active')
+                    ->label('Активно')
                     ->required()
                     ->default(true),
                 Select::make('image_id')
                     ->relationship('image', 'title')
                     ->searchable()
                     ->preload()
-                    ->label('Slika projekta'),
+                    ->label('Слика пројекта'),
             ]);
     }
 }

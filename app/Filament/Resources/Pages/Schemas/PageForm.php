@@ -16,24 +16,29 @@ class PageForm
         return $schema
             ->components([
                 TextInput::make('title')
+                    ->label('Наслов')
                     ->required()
                     ->live(onBlur: true)
                     ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug($state))),
                 TextInput::make('slug')
+                    ->label('Слаг (за URL)')
                     ->required()
                     ->unique(ignoreRecord: true),
                 Textarea::make('content')
+                    ->label('Садржај')
                     ->columnSpanFull(),
                 Select::make('parent_id')
                     ->relationship('parent', 'title')
                     ->searchable()
                     ->preload()
-                    ->label('Roditeljska stranica'),
+                    ->label('Родитељска страница'),
                 TextInput::make('order')
+                    ->label('Редослед')
                     ->required()
                     ->numeric()
                     ->default(0),
                 Toggle::make('is_active')
+                    ->label('Активно')
                     ->required()
                     ->default(true),
             ]);

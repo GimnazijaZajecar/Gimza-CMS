@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Categories\Schemas;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Str;
 
 class CategoryForm
 {
@@ -13,23 +14,26 @@ class CategoryForm
         return $schema
             ->components([
                 TextInput::make('name')
+                    ->label('Назив')
                     ->required()
                     ->live(onBlur: true)
-                    ->afterStateUpdated(fn ($state, callable $set) => $set('slug', \Illuminate\Support\Str::slug($state))),
+                    ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug($state))),
                 TextInput::make('slug')
+                    ->label('Слаг (за URL)')
                     ->required()
                     ->unique(ignoreRecord: true),
                 Select::make('type')
+                    ->label('Тип')
                     ->options([
-                        'vest' => 'Vest',
-                        'dokument' => 'Dokument',
+                        'vest' => 'Вест',
+                        'dokument' => 'Документ',
                     ])
                     ->required(),
                 Select::make('parent_id')
                     ->relationship('parent', 'name')
                     ->searchable()
                     ->preload()
-                    ->label('Roditeljska kategorija'),
+                    ->label('Родитељска категорија'),
             ]);
     }
 }

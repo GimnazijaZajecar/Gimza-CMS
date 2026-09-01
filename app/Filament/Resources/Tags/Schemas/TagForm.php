@@ -13,10 +13,12 @@ class TagForm
         return $schema
             ->components([
                 TextInput::make('name')
+                    ->label('Назив')
                     ->required()
                     ->live(onBlur: true)
                     ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug($state))),
                 TextInput::make('slug')
+                    ->label('Слаг (за URL)')
                     ->required()
                     ->unique(ignoreRecord: true),
             ]);
