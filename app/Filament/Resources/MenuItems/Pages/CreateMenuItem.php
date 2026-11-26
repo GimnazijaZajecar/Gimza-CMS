@@ -8,4 +8,6 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateMenuItem extends CreateRecord
 {
     protected static string $resource = MenuItemResource::class;
+
+    protected static ?string $title = 'Нова ставка менија';
 }

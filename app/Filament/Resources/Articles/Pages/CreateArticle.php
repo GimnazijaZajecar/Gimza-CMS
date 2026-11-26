@@ -9,10 +9,5 @@ class CreateArticle extends CreateRecord
 {
     protected static string $resource = ArticleResource::class;
 
-    protected function mutateFormDataBeforeCreate(array $data): array
-    {
-        $data['created_by_id'] = auth()->id();
-
-        return $data;
-    }
+    protected static ?string $title = 'Нови чланак';
 }

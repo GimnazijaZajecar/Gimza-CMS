@@ -10,10 +10,12 @@ class ListCategories extends ListRecords
 {
     protected static string $resource = CategoryResource::class;
 
+    protected ?string $subheading = 'Категорије имају два нивоа, као у веб продавници: надкатегорија (нпр. Такмичења) и поткатегорија (нпр. Информатика).';
+
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()->label('Нова категорија'),
         ];
     }
 }

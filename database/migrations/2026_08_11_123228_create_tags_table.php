@@ -7,21 +7,17 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Ознаке (тагови) се праве директно из падајуће листе у формулару чланка.
      */
     public function up(): void
     {
-         Schema::create('tags', function (Blueprint $table) {
-        $table->id();
-        $table->string('name');
-        $table->string('slug')->unique();
-        $table->timestamps();
-    });
+        Schema::create('tags', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->unique();
+            $table->timestamps();
+        });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('tags');

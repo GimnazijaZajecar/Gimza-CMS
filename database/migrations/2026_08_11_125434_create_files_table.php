@@ -7,26 +7,25 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Документа за преузимање. Врста фајла се не уноси, већ се чита из екстензије.
+     * Датум отпремања и измене су created_at и updated_at (не мењају се ручно).
      */
     public function up(): void
     {
         Schema::create('files', function (Blueprint $table) {
-        $table->id();
-        $table->string('title');
-        $table->string('file_name');
-        $table->string('url');
-        $table->foreignId('uploaded_by_id')->nullable()->constrained('users')->nullOnDelete();
-        $table->dateTime('uploaded_date');
-        $table->boolean('is_active')->default(true);
-        $table->string('file_type');
-        $table->timestamps();
-    });
+            $table->id();
+            $table->string('title');
+            $table->string('slug')->unique();
+            $table->string('path');
+            $table->string('file_name');
+            $table->unsignedBigInteger('size')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->foreignId('uploaded_by_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->timestamps();
+        });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('files');

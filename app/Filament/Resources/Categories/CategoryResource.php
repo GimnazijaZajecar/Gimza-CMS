@@ -7,18 +7,34 @@ use App\Filament\Resources\Categories\Pages\EditCategory;
 use App\Filament\Resources\Categories\Pages\ListCategories;
 use App\Filament\Resources\Categories\Schemas\CategoryForm;
 use App\Filament\Resources\Categories\Tables\CategoriesTable;
+use App\Filament\Support\AdminOnly;
 use App\Models\Category;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class CategoryResource extends Resource
 {
+    use AdminOnly;
+
     protected static ?string $model = Category::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedFolder;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Садржај сајта';
+
+    protected static ?int $navigationSort = 2;
+
+    protected static ?string $navigationLabel = 'Категорије';
+
+    protected static ?string $modelLabel = 'категорија';
+
+    protected static ?string $pluralModelLabel = 'категорије';
+
+    protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Schema $schema): Schema
     {
@@ -28,13 +44,6 @@ class CategoryResource extends Resource
     public static function table(Table $table): Table
     {
         return CategoriesTable::configure($table);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
     }
 
     public static function getPages(): array

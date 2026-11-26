@@ -1,58 +1,59 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# CMS за сајт Гимназије Зајечар
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Административни панел за уређивање садржаја школског сајта. Наставници и администратор у њему уносе чланке, странице, мени, галерију и документа, а професори заказују контролне и писмене задатке.
 
-## About Laravel
+## Технологије
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Laravel 13 (PHP 8.4)
+- Filament 5 (администраторски панел)
+- SQLite база
+- OpenSpout (Excel табеле)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Покретање
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan storage:link
+php artisan migrate:fresh --seed
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Панел је на адреси `/admin`. После `migrate:fresh --seed` у терминалу се исписују налози за пријаву. Ако у `.env` није уписана `ADMIN_PASSWORD`, лозинка је насумична.
 
-## Contributing
+Почетни подаци (запослени, предмети, одељења, новости, странице, мени и галерија) преузети су са старог сајта www.gimza.edu.rs. Налози запослених имају привремене адресе `име.презиме@gimza.test` које треба заменити правим.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+> `migrate:fresh` брише целу базу и прави је поново са почетним подацима. Покреће се када се промени структура базе.
 
-## Code of Conduct
+## Улоге
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+| Улога | Шта види |
+|---|---|
+| Администратор | Цео панел: садржај, структуру сајта, одељења, предмете, кориснике и распоред провера |
+| Професор | Само распоред провера и подешавања свог налога; мења само провере које је сам заказао |
 
-## Security Vulnerabilities
+## Садржај
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- **Чланци** – вест, успех, догађај, пројекат или текст за страницу. Статус: нацрт, објављено, архивирано. Датум објаве се уписује сам.
+- **Категорије** – два нивоа (надкатегорија → поткатегорија), као у веб продавници. Не бришу се.
+- **Ознаке** – праве се из падајуће листе у формулару чланка.
+- **Странице** – немају свој текст; у формулару се бирају чланци који се на њима приказују.
+- **Мени** – свака ставка припада главном менију или менију у подножју и води на страницу или на линк.
+- **Галерија** – једна галерија са подгалеријама; слике се аутоматски чувају као `.webp`.
+- **Документа** – фајлови за преузимање; врста фајла се чита из екстензије, а бележи се ко је фајл отпремио и изменио.
 
-## License
+## Распоред провера
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Правила за једно одељење (подешавају се у `app/Support/ExamSchedule.php`):
+
+- највише једна провера дневно (контролни или писмени),
+- највише три провере недељно,
+- само радним данима и не у прошлости.
+
+Правила се проверавају у календару (заузети дани се не могу изабрати) и на серверу пре чувања. Дугме „Извези у Excel“ прави табелу распореда, а администратор може да је окачи у Документа.
+
+## Тестови
+
+```bash
+php artisan test
+```

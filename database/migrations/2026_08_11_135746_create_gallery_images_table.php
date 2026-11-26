@@ -7,22 +7,19 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Слике се додају директно у подгалерију и чувају се као .webp.
      */
     public function up(): void
     {
         Schema::create('gallery_images', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('gallery_id')->constrained('galleries')->cascadeOnDelete();
-        $table->foreignId('file_id')->constrained('files')->cascadeOnDelete();
-        $table->integer('order')->default(0);
-        $table->timestamps();
-    });
+            $table->id();
+            $table->foreignId('gallery_id')->constrained('galleries')->cascadeOnDelete();
+            $table->string('path');
+            $table->integer('order')->default(0);
+            $table->timestamps();
+        });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('gallery_images');

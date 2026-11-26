@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\Tags\Schemas;
 
+use App\Filament\Support\Fields;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use Illuminate\Support\Str;
 
 class TagForm
 {
@@ -12,15 +13,16 @@ class TagForm
     {
         return $schema
             ->components([
-                TextInput::make('name')
-                    ->label('Назив')
-                    ->required()
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug($state))),
-                TextInput::make('slug')
-                    ->label('Слаг (за URL)')
-                    ->required()
-                    ->unique(ignoreRecord: true),
+                Section::make()
+                    ->schema([
+                        Fields::validateOnBlur(
+                            TextInput::make('name')
+                                ->label('Назив ознаке')
+                                ->required()
+                                ->maxLength(50)
+                                ->unique(ignoreRecord: true)
+                        ),
+                    ]),
             ]);
     }
 }

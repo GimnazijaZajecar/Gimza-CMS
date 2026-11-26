@@ -7,23 +7,20 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Категорије имају највише два нивоа: категорија и поткатегорија
+     * (као у веб продавници: Рачунари → Лаптопови).
      */
     public function up(): void
     {
-       Schema::create('categories', function (Blueprint $table) {
-        $table->id();
-        $table->string('name');
-        $table->string('slug')->unique();
-        $table->string('type');
-        $table->foreignId('parent_id')->nullable()->constrained('categories')->nullOnDelete();
-        $table->timestamps();
-    });
+        Schema::create('categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('slug')->unique();
+            $table->foreignId('parent_id')->nullable()->constrained('categories')->nullOnDelete();
+            $table->timestamps();
+        });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('categories');

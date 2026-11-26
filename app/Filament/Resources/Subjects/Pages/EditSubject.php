@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Subjects\Pages;
 
 use App\Filament\Resources\Subjects\SubjectResource;
+use App\Models\Subject;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
@@ -13,7 +14,9 @@ class EditSubject extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            DeleteAction::make(),
+            // Предмет који већ има заказане провере не може да се обрише.
+            DeleteAction::make()
+                ->hidden(fn (Subject $record): bool => $record->exams()->exists()),
         ];
     }
 }

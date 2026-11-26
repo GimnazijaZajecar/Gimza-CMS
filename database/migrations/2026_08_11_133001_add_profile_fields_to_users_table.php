@@ -6,30 +6,25 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-        $table->string('first_name')->nullable();
-        $table->string('last_name')->nullable();
-        $table->string('title')->nullable();
-        $table->string('role')->nullable();
-        $table->foreignId('image_id')->nullable()->constrained('files')->nullOnDelete();
-        $table->string('username')->nullable()->unique();
-        $table->boolean('is_active')->default(true);
-    });
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->string('title')->nullable();
+            $table->string('role')->default('profesor');
+            $table->string('username')->nullable()->unique();
+            $table->string('phone')->nullable();
+            $table->string('photo')->nullable();
+            $table->boolean('is_active')->default(true);
+        });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-       Schema::table('users', function (Blueprint $table) {
-        $table->dropForeign(['image_id']);
-        $table->dropColumn(['first_name', 'last_name', 'title', 'role', 'image_id', 'username', 'is_active']);
-    });
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropUnique(['username']);
+            $table->dropColumn(['first_name', 'last_name', 'title', 'role', 'username', 'phone', 'photo', 'is_active']);
+        });
     }
 };

@@ -2,23 +2,31 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\DeletesStoredFiles;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 class GalleryImage extends Model
 {
+    use DeletesStoredFiles;
+
     protected $fillable = [
         'gallery_id',
-        'file_id',
+        'path',
         'order',
     ];
 
-    public function gallery()
+    /** @var array<string> */
+    protected array $storedFiles = ['path'];
+
+    public function gallery(): BelongsTo
     {
         return $this->belongsTo(Gallery::class);
     }
 
-    public function file()
+    public function getUrlAttribute(): string
     {
-        return $this->belongsTo(File::class);
+        return Storage::disk('public')->url($this->path);
     }
 }

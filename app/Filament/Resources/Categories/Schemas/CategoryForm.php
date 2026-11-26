@@ -2,10 +2,12 @@
 
 namespace App\Filament\Resources\Categories\Schemas;
 
+use App\Filament\Support\Fields;
+use App\Models\Category;
+use Closure;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use Illuminate\Support\Str;
 
 class CategoryForm
 {
@@ -13,27 +15,42 @@ class CategoryForm
     {
         return $schema
             ->components([
-                TextInput::make('name')
-                    ->label('Назив')
-                    ->required()
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug($state))),
-                TextInput::make('slug')
-                    ->label('Слаг (за URL)')
-                    ->required()
-                    ->unique(ignoreRecord: true),
-                Select::make('type')
-                    ->label('Тип')
-                    ->options([
-                        'vest' => 'Вест',
-                        'dokument' => 'Документ',
-                    ])
-                    ->required(),
-                Select::make('parent_id')
-                    ->relationship('parent', 'name')
-                    ->searchable()
-                    ->preload()
-                    ->label('Родитељска категорија'),
+                Section::make()
+                    ->columns(2)
+                    ->schema([
+                        Fields::title('name', 'Назив'),
+                        Fields::slug(),
+                        Select::make('parent_id')
+                            ->label('Надкатегорија')
+                            ->placeholder('Нема – ово је главна категорија')
+                            ->options(fn (?Category $record): array => Category::query()
+                                ->topLevel()
+                                ->when($record, fn ($query) => $query->whereKeyNot($record->getKey()))
+                                ->orderBy('name')
+                                ->pluck('name', 'id')
+                                ->all())
+                            ->searchable()
+                            ->disabled(fn (?Category $record): bool => (bool) $record?->children()->exists())
+                            ->helperText(fn (?Category $record): string => $record?->children()->exists()
+                                ? 'Ова категорија има поткатегорије, па не може и сама да буде поткатегорија.'
+                                : 'Изаберите надкатегорију ако је ово поткатегорија (нпр. Такмичења → Информатика).')
+                            ->rule(fn (?Category $record): Closure => function (string $attribute, mixed $value, Closure $fail) use ($record): void {
+                                if (blank($value)) {
+                                    return;
+                                }
+
+                                $parent = Category::find($value);
+
+                                if (! $parent) {
+                                    $fail('Изабрана надкатегорија не постоји.');
+                                } elseif ($record && (int) $value === $record->getKey()) {
+                                    $fail('Категорија не може бити сама себи надкатегорија.');
+                                } elseif ($parent->parent_id !== null) {
+                                    $fail('Надкатегорија мора бити главна категорија (дозвољена су два нивоа).');
+                                }
+                            })
+                            ->columnSpanFull(),
+                    ]),
             ]);
     }
 }

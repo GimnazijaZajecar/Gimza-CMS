@@ -7,18 +7,34 @@ use App\Filament\Resources\Files\Pages\EditFile;
 use App\Filament\Resources\Files\Pages\ListFiles;
 use App\Filament\Resources\Files\Schemas\FileForm;
 use App\Filament\Resources\Files\Tables\FilesTable;
+use App\Filament\Support\AdminOnly;
 use App\Models\File;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class FileResource extends Resource
 {
+    use AdminOnly;
+
     protected static ?string $model = File::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPaperClip;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Садржај сајта';
+
+    protected static ?int $navigationSort = 5;
+
+    protected static ?string $navigationLabel = 'Документа';
+
+    protected static ?string $modelLabel = 'документ';
+
+    protected static ?string $pluralModelLabel = 'документа';
+
+    protected static ?string $recordTitleAttribute = 'title';
 
     public static function form(Schema $schema): Schema
     {
@@ -28,13 +44,6 @@ class FileResource extends Resource
     public static function table(Table $table): Table
     {
         return FilesTable::configure($table);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
     }
 
     public static function getPages(): array
